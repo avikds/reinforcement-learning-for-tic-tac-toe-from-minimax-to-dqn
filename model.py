@@ -760,7 +760,7 @@ def train_q_learning_agent(
         status = 'ongoing'
 
         while not episode_check_terminate(status):
-            # Agent (X) chooses an action.
+            # Agent (X) chooses a flat action index.
             state_key, action = episode_agent_pick_action(
                 q_table,
                 board,
@@ -780,7 +780,7 @@ def train_q_learning_agent(
             next_player = transition['next_player']
             status = transition['status']
 
-            # If the agent itself ended the game, update immediately.
+            # Agent ended the game.
             if transition['done']:
                 episode_apply_q_update(
                     q_table,
@@ -802,6 +802,17 @@ def train_q_learning_agent(
                 rng
             )
 
+            # opponent_policy may return either:
+            #   - a flat action index, e.g. 4
+            #   - a (row, col) tuple, e.g. (1, 1)
+            if isinstance(opponent_action, tuple):
+                opponent_action = (
+                    int(opponent_action[0]) * 3
+                    + int(opponent_action[1])
+                )
+            else:
+                opponent_action = int(opponent_action)
+
             opponent_transition = episode_apply_action(
                 next_board,
                 opponent_action,
@@ -813,7 +824,8 @@ def train_q_learning_agent(
             current_player = opponent_transition['next_player']
             status = opponent_transition['status']
 
-            # Update the agent's decision using the state after the opponent response.
+            # Update the agent's previous action using the result
+            # after the opponent's move.
             episode_apply_q_update(
                 q_table,
                 state_key,
