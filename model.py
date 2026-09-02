@@ -1202,8 +1202,10 @@ def deserialize_q_table_from_dict(serialized):
         for state_key, values in serialized.items()
     }
 
-# Step 64 - encode_board_flat_length_nine (not yet solved)
-# TODO: implement
+# Step 64 - encode_board_flat_length_nine
+def encode_board_flat_length_nine(board, current_player):
+    """Encode a 3x3 board as a length-9 float32 vector from current_player's view."""
+    return (board * current_player).astype(np.float32).reshape(9)
 
 # Step 65 - encode_board_one_hot_length_eighteen (not yet solved)
 # TODO: implement
