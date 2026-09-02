@@ -1019,8 +1019,90 @@ def train_q_agent_self_play(
         'episode_outcomes': episode_outcomes
     }
 
-# Step 59 - evaluate_q_agent_vs_random (not yet solved)
-# TODO: implement
+# Step 59 - evaluate_q_agent_vs_random
+def evaluate_q_agent_vs_random(q_table, num_games, rng):
+    """Play num_games between the greedy Q-agent and a random opponent.
+
+    Returns a dict with keys 'wins', 'losses', 'draws' (ints) and
+    'win_rate', 'loss_rate', 'draw_rate' (floats), all from the agent's
+    perspective. The agent alternates between playing X and O across games.
+    """
+    wins = 0
+    losses = 0
+    draws = 0
+
+    if num_games == 0:
+        return {
+            'wins': 0,
+            'losses': 0,
+            'draws': 0,
+            'win_rate': 0.0,
+            'loss_rate': 0.0,
+            'draw_rate': 0.0
+        }
+
+    for game_index in range(num_games):
+        board = create_empty_board()
+        agent_player = 1 if game_index % 2 == 0 else -1
+        current_player = 1
+
+        while True:
+            if current_player == agent_player:
+                perspective_board = flip_board_perspective(
+                    board,
+                    agent_player
+                )
+                state_key = canonical_board_key(perspective_board)
+
+                legal_moves = get_legal_moves(perspective_board)
+                legal_actions = [
+                    row * 3 + col
+                    for row, col in legal_moves
+                ]
+
+                action = greedy_argmax_over_legal_actions(
+                    q_table,
+                    state_key,
+                    legal_actions,
+                    rng
+                )
+
+            else:
+                action = random_move_agent(
+                    board,
+                    current_player,
+                    rng
+                )
+                action = action[0] * 3 + action[1]
+
+            row = action // 3
+            col = action % 3
+            board = place_move(board, row, col, current_player)
+
+            status = get_game_status(board)
+
+            if status != 'ongoing':
+                reward = tic_tac_toe_reward(status, agent_player)
+
+                if reward > 0:
+                    wins += 1
+                elif reward < 0:
+                    losses += 1
+                else:
+                    draws += 1
+
+                break
+
+            current_player = switch_player(current_player)
+
+    return {
+        'wins': wins,
+        'losses': losses,
+        'draws': draws,
+        'win_rate': wins / num_games,
+        'loss_rate': losses / num_games,
+        'draw_rate': draws / num_games
+    }
 
 # Step 60 - evaluate_q_agent_vs_minimax (not yet solved)
 # TODO: implement

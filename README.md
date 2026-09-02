@@ -68,7 +68,7 @@ python scaffold.py
 - [x] **56.** flip_board_perspective
 - [x] **57.** perspective_reward_sign
 - [x] **58.** train_q_agent_self_play
-- [ ] **59.** evaluate_q_agent_vs_random
+- [x] **59.** evaluate_q_agent_vs_random
 - [ ] **60.** evaluate_q_agent_vs_minimax
 - [ ] **61.** inspect_q_values_for_state
 - [ ] **62.** serialize_q_table_to_dict
