@@ -66,7 +66,7 @@ python scaffold.py
 - [x] **54.** compute_batched_outcome_stats
 - [x] **55.** self_play_episode
 - [x] **56.** flip_board_perspective
-- [ ] **57.** perspective_reward_sign
+- [x] **57.** perspective_reward_sign
 - [ ] **58.** train_q_agent_self_play
 - [ ] **59.** evaluate_q_agent_vs_random
 - [ ] **60.** evaluate_q_agent_vs_minimax

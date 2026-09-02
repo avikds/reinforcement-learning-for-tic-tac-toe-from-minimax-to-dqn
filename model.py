@@ -900,8 +900,13 @@ def flip_board_perspective(board, current_player):
     """Return a board view where current_player's marks are +1."""
     return (board * current_player).astype(int, copy=True)
 
-# Step 57 - perspective_reward_sign (not yet solved)
-# TODO: implement
+# Step 57 - perspective_reward_sign
+def perspective_reward_sign(reward, acting_player, scoring_player):
+    """Return reward expressed from acting_player's perspective."""
+    if acting_player == scoring_player:
+        return float(reward)
+
+    return float(-reward)
 
 # Step 58 - train_q_agent_self_play (not yet solved)
 # TODO: implement
