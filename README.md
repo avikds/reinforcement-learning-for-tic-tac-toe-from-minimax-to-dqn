@@ -36,7 +36,7 @@ python scaffold.py
 - [x] **24.** minimax_value
 - [x] **25.** minimax_recursive
 - [x] **26.** minimax_max_min_step
-- [ ] **27.** minimax_best_move
+- [x] **27.** minimax_best_move
 - [ ] **28.** minimax_alpha_beta
 - [ ] **29.** play_minimax_vs_random_matches
 - [ ] **30.** play_minimax_vs_minimax_matches
