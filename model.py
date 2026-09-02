@@ -113,8 +113,13 @@ def get_game_status(board):
     else:
         return 'ongoing'
 
-# Step 14 - get_current_player (not yet solved)
-# TODO: implement
+# Step 14 - get_current_player
+def get_current_player(board):
+    """Return 1 if X is to move, -1 if O is to move."""
+    x_count = np.count_nonzero(board == 1)
+    o_count = np.count_nonzero(board == -1)
+
+    return 1 if x_count == o_count else -1
 
 # Step 15 - switch_player (not yet solved)
 # TODO: implement
