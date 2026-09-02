@@ -241,7 +241,7 @@ def play_random_vs_random_matches(n_games, rng):
 # Step 22 - compute_outcome_rates
 def compute_outcome_rates(outcomes):
     """Return {'x_win_rate','o_win_rate','draw_rate'} from outcome labels."""
-    # The assembled scaffold may pass an already-computed rates dictionary.
+
     if isinstance(outcomes, dict):
         return {
             'x_win_rate': float(outcomes.get('x_win_rate', 0.0)),
