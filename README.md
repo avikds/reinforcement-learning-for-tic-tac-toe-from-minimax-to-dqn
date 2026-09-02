@@ -1,0 +1,2 @@
+# reinforcement-learning-for-tic-tac-toe-from-minimax-to-dqn
+Build a complete Tic-Tac-Toe reinforcement learning lab from scratch: the game engine, minimax baselines, tabular Q-learning with self-play, and a deep Q-network agent, then compare value-based and policy-based learners in a fully observable game you can debug end to end. A hands-on tour of exploration, bootstrapping, and function approximation.
