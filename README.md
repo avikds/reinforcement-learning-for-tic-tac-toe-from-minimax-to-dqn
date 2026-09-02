@@ -77,7 +77,7 @@ python scaffold.py
 - [x] **65.** encode_board_one_hot_length_eighteen
 - [x] **66.** build_mlp_architecture
 - [x] **67.** initialize_mlp_parameters
-- [ ] **68.** mlp_forward_pass
+- [x] **68.** mlp_forward_pass
 - [ ] **69.** mask_illegal_actions_neg_inf
 - [ ] **70.** argmax_action_from_q_values
 - [ ] **71.** mse_loss_on_chosen_action

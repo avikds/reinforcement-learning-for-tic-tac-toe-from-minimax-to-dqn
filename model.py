@@ -1253,8 +1253,30 @@ def initialize_mlp_parameters(architecture, seed=0):
         'b2': b2
     }
 
-# Step 68 - mlp_forward_pass (not yet solved)
-# TODO: implement
+# Step 68 - mlp_forward_pass
+def mlp_forward_pass(params, x):
+    """Forward pass through a two-layer MLP with ReLU hidden activation.
+
+    Args:
+        params: dict with keys 'W1', 'b1', 'W2', 'b2'.
+        x: np.ndarray of shape (batch, input_dim).
+
+    Returns:
+        (q_values, cache) where q_values has shape (batch, output_dim) and
+        cache is a dict with keys {'x', 'z1', 'h1', 'q'}.
+    """
+    z1 = x @ params['W1'] + params['b1']
+    h1 = np.maximum(0.0, z1)
+    q = h1 @ params['W2'] + params['b2']
+
+    cache = {
+        'x': x,
+        'z1': z1,
+        'h1': h1,
+        'q': q
+    }
+
+    return q, cache
 
 # Step 69 - mask_illegal_actions_neg_inf (not yet solved)
 # TODO: implement
