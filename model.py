@@ -50,8 +50,17 @@ def place_move(board, row, col, player):
     new_board[row, col] = player
     return new_board
 
-# Step 6 - get_legal_moves (not yet solved)
-# TODO: implement
+# Step 6 - get_legal_moves
+def get_legal_moves(board):
+    """Return a list of (row, col) tuples for all empty cells on the board."""
+    legal_moves = []
+
+    for row in range(3):
+        for col in range(3):
+            if board[row, col] == 0:
+                legal_moves.append((row, col))
+
+    return legal_moves
 
 # Step 7 - check_row_win (not yet solved)
 # TODO: implement
