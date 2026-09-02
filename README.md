@@ -86,7 +86,7 @@ python scaffold.py
 - [x] **74.** create_replay_buffer
 - [x] **75.** append_transition_to_buffer
 - [x] **76.** cap_buffer_size_drop_oldest
-- [ ] **77.** sample_minibatch_from_buffer
+- [x] **77.** sample_minibatch_from_buffer
 - [ ] **78.** build_target_network_copy
 - [ ] **79.** compute_target_q_with_target_network
 - [ ] **80.** sync_target_network_periodically
