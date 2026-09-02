@@ -43,7 +43,7 @@ python scaffold.py
 - [x] **31.** encode_board_state_key
 - [x] **32.** canonical_board_key
 - [x] **33.** initialize_q_table
-- [ ] **34.** get_q_value
+- [x] **34.** get_q_value
 - [ ] **35.** set_q_value
 - [ ] **36.** choose_learning_rate_alpha
 - [ ] **37.** choose_discount_factor_gamma
