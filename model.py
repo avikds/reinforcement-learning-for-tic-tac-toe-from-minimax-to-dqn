@@ -1759,8 +1759,144 @@ def train_dqn_agent(
         'architecture': architecture
     }
 
-# Step 84 - compare_dqn_tabular_random_minimax (not yet solved)
-# TODO: implement
+# Step 84 - compare_dqn_tabular_random_minimax
+def compare_dqn_tabular_random_minimax(dqn_artifacts, q_table, num_games=200):
+    """Round-robin evaluation among DQN, tabular Q, random, and minimax agents."""
+    rng = np.random.default_rng(0)
+
+    dqn_params = dqn_artifacts['online_params']
+
+    def choose_action(agent_name, board, player):
+        if agent_name == 'random':
+            return random_move_agent(board, player, rng)
+
+        if agent_name == 'minimax':
+            _, move = minimax_alpha_beta(
+                board,
+                player,
+                -float('inf'),
+                float('inf')
+            )
+            return move
+
+        # Both learned agents represent the position from the
+        # current player's perspective.
+        perspective_board = flip_board_perspective(board, player)
+        state_key = canonical_board_key(perspective_board)
+
+        legal_moves = get_legal_moves(board)
+        legal_actions = [
+            row * 3 + col
+            for row, col in legal_moves
+        ]
+
+        if agent_name == 'dqn':
+            state = encode_board_flat_length_nine(
+                board,
+                player
+            )
+
+            legal_mask = np.zeros(9, dtype=bool)
+            legal_mask[legal_actions] = True
+
+            action = dqn_select_action(
+                dqn_params,
+                state,
+                legal_mask,
+                0.0,
+                rng
+            )
+            return int(action // 3), int(action % 3)
+
+        # Tabular Q agent.
+        action = greedy_argmax_over_legal_actions(
+            q_table,
+            state_key,
+            legal_actions,
+            rng
+        )
+        return int(action // 3), int(action % 3)
+
+    def play_match(first_agent, second_agent):
+        wins = 0
+        draws = 0
+        losses = 0
+
+        for game_index in range(num_games):
+            board = create_empty_board()
+
+            # Alternate which agent gets X.
+            first_agent_player = 1 if game_index % 2 == 0 else -1
+            second_agent_player = -first_agent_player
+
+            current_player = 1
+
+            while True:
+                if current_player == first_agent_player:
+                    move = choose_action(
+                        first_agent,
+                        board,
+                        current_player
+                    )
+                else:
+                    move = choose_action(
+                        second_agent,
+                        board,
+                        current_player
+                    )
+
+                row, col = move
+                board = place_move(
+                    board,
+                    row,
+                    col,
+                    current_player
+                )
+
+                status = get_game_status(board)
+
+                if status != 'ongoing':
+                    if status == 'draw':
+                        draws += 1
+                    elif (
+                        (status == 'X_win' and first_agent_player == 1)
+                        or
+                        (status == 'O_win' and first_agent_player == -1)
+                    ):
+                        wins += 1
+                    else:
+                        losses += 1
+
+                    break
+
+                current_player = switch_player(current_player)
+
+        if num_games == 0:
+            return {
+                'wins': 0.0,
+                'draws': 0.0,
+                'losses': 0.0
+            }
+
+        return {
+            'wins': wins / num_games,
+            'draws': draws / num_games,
+            'losses': losses / num_games
+        }
+
+    matchups = [
+        ('dqn_vs_random', 'dqn', 'random'),
+        ('dqn_vs_minimax', 'dqn', 'minimax'),
+        ('dqn_vs_tabular', 'dqn', 'tabular'),
+        ('tabular_vs_random', 'tabular', 'random'),
+        ('tabular_vs_minimax', 'tabular', 'minimax'),
+        ('random_vs_minimax', 'random', 'minimax')
+    ]
+
+    return {
+        key: play_match(first_agent, second_agent)
+        for key, first_agent, second_agent in matchups
+    }
 
 # Step 85 - sarsa_on_policy_update (not yet solved)
 # TODO: implement
