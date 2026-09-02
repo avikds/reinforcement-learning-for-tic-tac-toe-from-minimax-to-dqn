@@ -63,7 +63,7 @@ python scaffold.py
 - [x] **51.** episode_apply_q_update
 - [x] **52.** episode_check_terminate
 - [x] **53.** train_q_learning_agent
-- [ ] **54.** compute_batched_outcome_stats
+- [x] **54.** compute_batched_outcome_stats
 - [ ] **55.** self_play_episode
 - [ ] **56.** flip_board_perspective
 - [ ] **57.** perspective_reward_sign
