@@ -510,8 +510,10 @@ def get_q_value(q_table, state_key, action):
     """Return Q(state_key, action), or 0.0 if the pair is not in the table."""
     return q_table.get((state_key, action), 0.0)
 
-# Step 35 - set_q_value (not yet solved)
-# TODO: implement
+# Step 35 - set_q_value
+def set_q_value(q_table, state_key, action, value):
+    """Write a new Q-value for a (state, action) pair into the Q-table."""
+    q_table[(state_key, action)] = float(value)
 
 # Step 36 - choose_learning_rate_alpha (not yet solved)
 # TODO: implement
