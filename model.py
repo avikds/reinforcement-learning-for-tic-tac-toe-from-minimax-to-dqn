@@ -2254,8 +2254,18 @@ def reinforce_log_prob_of_action(logits, legal_action_mask, action):
 
     return log_prob, probs
 
-# Step 88 - reinforce_collect_episode_returns (not yet solved)
-# TODO: implement
+# Step 88 - reinforce_collect_episode_returns
+def reinforce_collect_episode_returns(rewards, gamma):
+    """Return discounted returns G_t for a REINFORCE episode as a numpy array of shape (T,)."""
+    returns = np.zeros(len(rewards), dtype=float)
+    
+    running_return = 0.0
+
+    for t in range(len(rewards) - 1, -1, -1):
+        running_return = rewards[t] + gamma * running_return
+        returns[t] = running_return
+
+    return returns
 
 # Step 89 - reinforce_policy_gradient_update (not yet solved)
 # TODO: implement
