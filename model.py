@@ -1464,8 +1464,13 @@ def sample_minibatch_from_buffer(buffer, batch_size, rng):
         )
     }
 
-# Step 78 - build_target_network_copy (not yet solved)
-# TODO: implement
+# Step 78 - build_target_network_copy
+def build_target_network_copy(online_params):
+    """Return a deep copy of the online MLP parameter dict."""
+    return {
+        key: value.copy()
+        for key, value in online_params.items()
+    }
 
 # Step 79 - compute_target_q_with_target_network (not yet solved)
 # TODO: implement
