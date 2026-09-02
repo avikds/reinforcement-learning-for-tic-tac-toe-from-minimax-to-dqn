@@ -35,8 +35,10 @@ def print_board(board):
     for row in board:
         print(' '.join(symbols[cell] for cell in row))
 
-# Step 4 - is_cell_empty (not yet solved)
-# TODO: implement
+# Step 4 - is_cell_empty
+def is_cell_empty(board, row, col):
+    """Return True if board[row, col] is empty (0), else False."""
+    return bool(board[row, col] == 0)
 
 # Step 5 - place_move (not yet solved)
 # TODO: implement
