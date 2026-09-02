@@ -287,8 +287,40 @@ def minimax_value(board, player):
     else:
         return min(child_values)
 
-# Step 25 - minimax_recursive (not yet solved)
-# TODO: implement
+# Step 25 - minimax_recursive
+def minimax_recursive(board, player):
+    """Return the memoized minimax value of `board` with `player` to move."""
+    if not hasattr(minimax_recursive, "_cache"):
+        minimax_recursive._cache = {}
+
+    cache = minimax_recursive._cache
+    key = (board.tobytes(), player)
+
+    if key in cache:
+        return cache[key]
+
+    status = get_game_status(board)
+
+    if status != 'ongoing':
+        value = minimax_terminal_score(status)
+        cache[key] = value
+        return value
+
+    legal_moves = get_legal_moves(board)
+    child_values = []
+
+    for row, col in legal_moves:
+        next_board = place_move(board, row, col, player)
+        value = minimax_recursive(next_board, switch_player(player))
+        child_values.append(value)
+
+    if player == 1:
+        value = max(child_values)
+    else:
+        value = min(child_values)
+
+    cache[key] = value
+    return value
 
 # Step 26 - minimax_max_min_step (not yet solved)
 # TODO: implement
