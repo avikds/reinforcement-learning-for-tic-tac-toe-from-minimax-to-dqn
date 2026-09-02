@@ -1104,8 +1104,68 @@ def evaluate_q_agent_vs_random(q_table, num_games, rng):
         'draw_rate': draws / num_games
     }
 
-# Step 60 - evaluate_q_agent_vs_minimax (not yet solved)
-# TODO: implement
+# Step 60 - evaluate_q_agent_vs_minimax
+def evaluate_q_agent_vs_minimax(q_table, num_games, rng):
+    """Evaluate the greedy Q-agent against an optimal minimax opponent."""
+    outcomes = []
+
+    for game_index in range(num_games):
+        board = create_empty_board()
+        agent_player = 1 if game_index % 2 == 0 else -1
+        current_player = 1
+
+        while True:
+            if current_player == agent_player:
+                perspective_board = flip_board_perspective(
+                    board,
+                    agent_player
+                )
+                state_key = canonical_board_key(perspective_board)
+
+                legal_moves = get_legal_moves(perspective_board)
+                legal_actions = [
+                    row * 3 + col
+                    for row, col in legal_moves
+                ]
+
+                action = greedy_argmax_over_legal_actions(
+                    q_table,
+                    state_key,
+                    legal_actions,
+                    rng
+                )
+
+                row = action // 3
+                col = action % 3
+
+            else:
+                _, move = minimax_alpha_beta(
+                    board,
+                    current_player,
+                    -float("inf"),
+                    float("inf")
+                )
+                row, col = move
+
+            board = place_move(board, row, col, current_player)
+
+            status = get_game_status(board)
+
+            if status != 'ongoing':
+                reward = tic_tac_toe_reward(status, agent_player)
+
+                if reward > 0:
+                    outcomes.append('X_win')
+                elif reward < 0:
+                    outcomes.append('O_win')
+                else:
+                    outcomes.append('draw')
+
+                break
+
+            current_player = switch_player(current_player)
+
+    return compute_outcome_rates(outcomes)
 
 # Step 61 - inspect_q_values_for_state (not yet solved)
 # TODO: implement
