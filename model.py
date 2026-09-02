@@ -77,8 +77,10 @@ def check_main_diagonal_win(board, player):
     """Return True if `player` occupies all three main-diagonal cells."""
     return bool(np.all(np.diag(board) == player))
 
-# Step 10 - check_anti_diagonal_win (not yet solved)
-# TODO: implement
+# Step 10 - check_anti_diagonal_win
+def check_anti_diagonal_win(board, player):
+    """Return True if `player` occupies all three anti-diagonal cells."""
+    return bool(np.all(np.fliplr(board).diagonal() == player))
 
 # Step 11 - is_winner (not yet solved)
 # TODO: implement
