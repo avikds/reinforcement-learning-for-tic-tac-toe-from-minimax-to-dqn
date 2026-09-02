@@ -98,7 +98,7 @@ python scaffold.py
 - [x] **86.** train_sarsa_agent
 - [x] **87.** reinforce_log_prob_of_action
 - [x] **88.** reinforce_collect_episode_returns
-- [ ] **89.** reinforce_policy_gradient_update
+- [x] **89.** reinforce_policy_gradient_update
 - [ ] **90.** train_reinforce_agent
 - [ ] **91.** compare_value_vs_policy_learners
 - [ ] **92.** symmetry_augmented_training

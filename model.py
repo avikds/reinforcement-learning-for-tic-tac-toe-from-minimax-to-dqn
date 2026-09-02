@@ -2267,8 +2267,79 @@ def reinforce_collect_episode_returns(rewards, gamma):
 
     return returns
 
-# Step 89 - reinforce_policy_gradient_update (not yet solved)
-# TODO: implement
+# Step 89 - reinforce_policy_gradient_update
+def reinforce_policy_gradient_update(
+    params,
+    episode_cache,
+    returns,
+    adam_state,
+    learning_rate=1e-2
+):
+    """Apply one REINFORCE update that ascends sum_t G_t log pi(a_t|s_t)."""
+    states = np.asarray(episode_cache['states'])
+    actions = np.asarray(episode_cache['actions'], dtype=int)
+    legal_masks = np.asarray(episode_cache['legal_masks'], dtype=bool)
+    returns = np.asarray(returns, dtype=float)
+
+    # Forward pass through the policy network.
+    logits, cache = mlp_forward_pass(params, states)
+
+    batch_size = states.shape[0]
+
+    # Stable masked softmax.
+    masked_logits = mask_illegal_actions_neg_inf(
+        logits,
+        legal_masks
+    )
+
+    max_logits = np.max(masked_logits, axis=1, keepdims=True)
+    shifted_logits = masked_logits - max_logits
+
+    exp_logits = np.exp(shifted_logits)
+    exp_logits[~legal_masks] = 0.0
+
+    probs = exp_logits / np.sum(exp_logits, axis=1, keepdims=True)
+
+    # Gradient of log pi(a|s):
+    # d log pi / d logits = one_hot(action) - pi.
+    dlogits = -returns[:, None] * probs
+
+    rows = np.arange(batch_size)
+    dlogits[rows, actions] += returns
+
+    # REINFORCE maximizes the objective, while Adam performs gradient
+    # descent. Therefore negate the policy-gradient objective here.
+    dq = -dlogits
+
+    h1 = cache['h1']
+    z1 = cache['z1']
+    x = cache['x']
+
+    # Output layer.
+    dW2 = h1.T @ dq
+    db2 = np.sum(dq, axis=0)
+
+    # ReLU backpropagation.
+    dh1 = dq @ params['W2'].T
+    dz1 = dh1 * (z1 > 0)
+
+    # Hidden layer.
+    dW1 = x.T @ dz1
+    db1 = np.sum(dz1, axis=0)
+
+    grads = {
+        'W1': dW1,
+        'b1': db1,
+        'W2': dW2,
+        'b2': db2
+    }
+
+    return adam_update_step(
+        params,
+        grads,
+        adam_state,
+        learning_rate=learning_rate
+    )
 
 # Step 90 - train_reinforce_agent (not yet solved)
 # TODO: implement
