@@ -55,7 +55,7 @@ python scaffold.py
 - [x] **43.** random_tie_break_argmax
 - [x] **44.** tic_tac_toe_reward
 - [x] **45.** q_learning_nonterminal_target
-- [ ] **46.** q_learning_terminal_target
+- [x] **46.** q_learning_terminal_target
 - [ ] **47.** q_learning_update
 - [ ] **48.** episode_reset_game
 - [ ] **49.** episode_agent_pick_action

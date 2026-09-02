@@ -626,8 +626,10 @@ def q_learning_nonterminal_target(
 
     return float(reward + gamma * max_next_q)
 
-# Step 46 - q_learning_terminal_target (not yet solved)
-# TODO: implement
+# Step 46 - q_learning_terminal_target
+def q_learning_terminal_target(reward):
+    """Return the TD target for a terminal transition."""
+    return float(reward)
 
 # Step 47 - q_learning_update (not yet solved)
 # TODO: implement
