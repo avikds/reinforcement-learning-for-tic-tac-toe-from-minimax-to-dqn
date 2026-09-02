@@ -646,8 +646,23 @@ def episode_reset_game():
     """Return a fresh empty board and the starting player (+1 for X)."""
     return create_empty_board(), 1
 
-# Step 49 - episode_agent_pick_action (not yet solved)
-# TODO: implement
+# Step 49 - episode_agent_pick_action
+def episode_agent_pick_action(q_table, board, current_player, epsilon, rng):
+    """Return (canonical_state_key, action_index_0_to_8) using epsilon-greedy over legal moves."""
+    state_key = canonical_board_key(board)
+
+    legal_moves = get_legal_moves(board)
+    legal_actions = [row * 3 + col for row, col in legal_moves]
+
+    action = epsilon_greedy_select_action(
+        q_table,
+        state_key,
+        legal_actions,
+        epsilon,
+        rng
+    )
+
+    return state_key, int(action)
 
 # Step 50 - episode_apply_action (not yet solved)
 # TODO: implement

@@ -58,7 +58,7 @@ python scaffold.py
 - [x] **46.** q_learning_terminal_target
 - [x] **47.** q_learning_update
 - [x] **48.** episode_reset_game
-- [ ] **49.** episode_agent_pick_action
+- [x] **49.** episode_agent_pick_action
 - [ ] **50.** episode_apply_action
 - [ ] **51.** episode_apply_q_update
 - [ ] **52.** episode_check_terminate
