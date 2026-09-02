@@ -238,8 +238,23 @@ def play_random_vs_random_matches(n_games, rng):
 
     return outcomes
 
-# Step 22 - compute_outcome_rates (not yet solved)
-# TODO: implement
+# Step 22 - compute_outcome_rates
+def compute_outcome_rates(outcomes):
+    """Return {'x_win_rate','o_win_rate','draw_rate'} from a list of outcome labels."""
+    total_games = len(outcomes)
+
+    if total_games == 0:
+        return {
+            'x_win_rate': 0.0,
+            'o_win_rate': 0.0,
+            'draw_rate': 0.0
+        }
+
+    return {
+        'x_win_rate': outcomes.count('X_win') / total_games,
+        'o_win_rate': outcomes.count('O_win') / total_games,
+        'draw_rate': outcomes.count('draw') / total_games
+    }
 
 # Step 23 - minimax_terminal_score (not yet solved)
 # TODO: implement

@@ -31,7 +31,7 @@ python scaffold.py
 - [x] **19.** random_move_agent
 - [x] **20.** play_random_vs_random_game
 - [x] **21.** play_random_vs_random_matches
-- [ ] **22.** compute_outcome_rates
+- [x] **22.** compute_outcome_rates
 - [ ] **23.** minimax_terminal_score
 - [ ] **24.** minimax_value
 - [ ] **25.** minimax_recursive
