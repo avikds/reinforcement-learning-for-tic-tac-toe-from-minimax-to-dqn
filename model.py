@@ -1186,8 +1186,13 @@ def inspect_q_values_for_state(q_table, board, current_player):
 
     return values
 
-# Step 62 - serialize_q_table_to_dict (not yet solved)
-# TODO: implement
+# Step 62 - serialize_q_table_to_dict
+def serialize_q_table_to_dict(q_table):
+    """Convert a Q-table (str -> np.ndarray shape (9,)) into a plain dict (str -> list of floats)."""
+    return {
+        str(state_key): [float(value) for value in values]
+        for state_key, values in q_table.items()
+    }
 
 # Step 63 - deserialize_q_table_from_dict (not yet solved)
 # TODO: implement
