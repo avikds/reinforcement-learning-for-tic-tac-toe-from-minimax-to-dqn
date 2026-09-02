@@ -631,8 +631,15 @@ def q_learning_terminal_target(reward):
     """Return the TD target for a terminal transition."""
     return float(reward)
 
-# Step 47 - q_learning_update (not yet solved)
-# TODO: implement
+# Step 47 - q_learning_update
+def q_learning_update(q_table, state_key, action, target, alpha):
+    """Apply Q(s,a) <- Q(s,a) + alpha * (target - Q(s,a)) and return the new value."""
+    current_q = get_q_value(q_table, state_key, action)
+    new_q = current_q + alpha * (target - current_q)
+
+    set_q_value(q_table, state_key, action, new_q)
+
+    return float(new_q)
 
 # Step 48 - episode_reset_game (not yet solved)
 # TODO: implement
