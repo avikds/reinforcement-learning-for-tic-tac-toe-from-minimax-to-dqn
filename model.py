@@ -895,8 +895,10 @@ def self_play_episode(q_table, alpha, gamma, epsilon, rng):
         'transitions': transitions
     }
 
-# Step 56 - flip_board_perspective (not yet solved)
-# TODO: implement
+# Step 56 - flip_board_perspective
+def flip_board_perspective(board, current_player):
+    """Return a board view where current_player's marks are +1."""
+    return (board * current_player).astype(int, copy=True)
 
 # Step 57 - perspective_reward_sign (not yet solved)
 # TODO: implement
