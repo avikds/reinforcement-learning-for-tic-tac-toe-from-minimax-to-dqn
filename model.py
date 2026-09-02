@@ -23,8 +23,17 @@ def encode_player(player):
     }
     return mapping[player]
 
-# Step 3 - print_board (not yet solved)
-# TODO: implement
+# Step 3 - print_board
+def print_board(board):
+    """Print the 3x3 board using X, O, and . characters."""
+    symbols = {
+        1: 'X',
+        -1: 'O',
+        0: '.'
+    }
+
+    for row in board:
+        print(' '.join(symbols[cell] for cell in row))
 
 # Step 4 - is_cell_empty (not yet solved)
 # TODO: implement

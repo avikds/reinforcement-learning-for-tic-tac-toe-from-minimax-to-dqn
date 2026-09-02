@@ -12,7 +12,7 @@ python scaffold.py
 
 - [x] **1.** create_empty_board
 - [x] **2.** encode_player
-- [ ] **3.** print_board
+- [x] **3.** print_board
 - [ ] **4.** is_cell_empty
 - [ ] **5.** place_move
 - [ ] **6.** get_legal_moves
