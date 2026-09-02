@@ -1930,8 +1930,309 @@ def sarsa_on_policy_update(
 
     return q_table
 
-# Step 86 - train_sarsa_agent (not yet solved)
-# TODO: implement
+# Step 86 - train_sarsa_agent
+def train_sarsa_agent(
+    num_episodes,
+    alpha,
+    gamma,
+    initial_epsilon,
+    min_epsilon,
+    decay_rate,
+    opponent_policy,
+    rng
+):
+    """Run num_episodes of on-policy SARSA vs opponent_policy."""
+    q_table = initialize_q_table()
+    episode_outcomes = []
+
+    for episode_index in range(num_episodes):
+        epsilon = epsilon_decay_schedule(
+            initial_epsilon,
+            episode_index,
+            min_epsilon,
+            decay_rate
+        )
+
+        board, current_player = episode_reset_game()
+        status = 'ongoing'
+
+        # Pending agent transition awaiting the next agent action.
+        pending_state_key = None
+        pending_action = None
+        pending_reward = 0.0
+
+        while not episode_check_terminate(status):
+            # Agent is always X and current_player should be 1 here.
+            state_key, action = episode_agent_pick_action(
+                q_table,
+                board,
+                current_player,
+                epsilon,
+                rng
+            )
+
+            agent_transition = episode_apply_action(
+                board,
+                action,
+                current_player,
+                1
+            )
+
+            next_board = agent_transition['next_board']
+            status = agent_transition['status']
+            agent_reward = agent_transition['reward']
+            agent_done = agent_transition['done']
+
+            if agent_done:
+                # Terminal agent move: no bootstrap.
+                sarsa_on_policy_update(
+                    q_table,
+                    state_key,
+                    action,
+                    agent_reward,
+                    state_key,
+                    action,
+                    True,
+                    alpha,
+                    gamma
+                )
+
+                board = next_board
+                break
+
+            # Opponent O responds.
+            next_player = agent_transition['next_player']
+            opponent_action = opponent_policy(
+                next_board,
+                next_player,
+                rng
+            )
+
+            opponent_transition = episode_apply_action(
+                next_board,
+                opponent_action,
+                next_player,
+                1
+            )
+
+            board_after_opponent = opponent_transition['next_board']
+            status = opponent_transition['status']
+            opponent_reward = opponent_transition['reward']
+            opponent_done = opponent_transition['done']
+
+            if opponent_done:
+                # Opponent ended the game. The previous agent action
+                # gets the terminal reward from the agent's perspective.
+                sarsa_on_policy_update(
+                    q_table,
+                    state_key,
+                    action,
+                    opponent_reward,
+                    state_key,
+                    action,
+                    True,
+                    alpha,
+                    gamma
+                )
+
+                board = board_after_opponent
+                break
+
+            # The agent is about to act again. Select the next on-policy
+            # action before updating the previous state-action pair.
+            next_state_key, next_action = episode_agent_pick_action(
+                q_table,
+                board_after_opponent,
+                1,
+                epsilon,
+                rng
+            )
+
+            # Update the previous agent transition using the action
+            # actually selected by the current epsilon-greedy policy.
+            sarsa_on_policy_update(
+                q_table,
+                state_key,
+                action,
+                opponent_reward,
+                next_state_key,
+                next_action,
+                False,
+                alpha,
+                gamma
+            )
+
+            board = board_after_opponent
+
+            # The next agent action has already been selected, so play it
+            # directly on the board.
+            agent_transition = episode_apply_action(
+                board,
+                next_action,
+                1,
+                1
+            )
+
+            board = agent_transition['next_board']
+            status = agent_transition['status']
+
+            if agent_transition['done']:
+                sarsa_on_policy_update(
+                    q_table,
+                    next_state_key,
+                    next_action,
+                    agent_transition['reward'],
+                    next_state_key,
+                    next_action,
+                    True,
+                    alpha,
+                    gamma
+                )
+                break
+
+            # Continue from the opponent's response to this new agent move.
+            current_state_key = next_state_key
+            current_action = next_action
+            current_reward = agent_transition['reward']
+
+            opponent_action = opponent_policy(
+                board,
+                -1,
+                rng
+            )
+
+            opponent_transition = episode_apply_action(
+                board,
+                opponent_action,
+                -1,
+                1
+            )
+
+            board = opponent_transition['next_board']
+            status = opponent_transition['status']
+
+            if opponent_transition['done']:
+                sarsa_on_policy_update(
+                    q_table,
+                    current_state_key,
+                    current_action,
+                    opponent_transition['reward'],
+                    current_state_key,
+                    current_action,
+                    True,
+                    alpha,
+                    gamma
+                )
+                break
+
+            next_state_key, next_action = episode_agent_pick_action(
+                q_table,
+                board,
+                1,
+                epsilon,
+                rng
+            )
+
+            sarsa_on_policy_update(
+                q_table,
+                current_state_key,
+                current_action,
+                opponent_transition['reward'],
+                next_state_key,
+                next_action,
+                False,
+                alpha,
+                gamma
+            )
+
+            # The loop now needs to continue from this newly selected
+            # agent action. Rather than duplicating the transition logic
+            # indefinitely, restart the main cycle with the selected move.
+            while not episode_check_terminate(status):
+                agent_transition = episode_apply_action(
+                    board,
+                    next_action,
+                    1,
+                    1
+                )
+
+                board = agent_transition['next_board']
+                status = agent_transition['status']
+
+                if agent_transition['done']:
+                    sarsa_on_policy_update(
+                        q_table,
+                        next_state_key,
+                        next_action,
+                        agent_transition['reward'],
+                        next_state_key,
+                        next_action,
+                        True,
+                        alpha,
+                        gamma
+                    )
+                    break
+
+                opponent_action = opponent_policy(
+                    board,
+                    -1,
+                    rng
+                )
+
+                opponent_transition = episode_apply_action(
+                    board,
+                    opponent_action,
+                    -1,
+                    1
+                )
+
+                board = opponent_transition['next_board']
+                status = opponent_transition['status']
+
+                if opponent_transition['done']:
+                    sarsa_on_policy_update(
+                        q_table,
+                        next_state_key,
+                        next_action,
+                        opponent_transition['reward'],
+                        next_state_key,
+                        next_action,
+                        True,
+                        alpha,
+                        gamma
+                    )
+                    break
+
+                new_state_key, new_action = episode_agent_pick_action(
+                    q_table,
+                    board,
+                    1,
+                    epsilon,
+                    rng
+                )
+
+                sarsa_on_policy_update(
+                    q_table,
+                    next_state_key,
+                    next_action,
+                    opponent_transition['reward'],
+                    new_state_key,
+                    new_action,
+                    False,
+                    alpha,
+                    gamma
+                )
+
+                next_state_key = new_state_key
+                next_action = new_action
+
+    # Record the final outcome for the episode.
+        episode_outcomes.append(status)
+
+    return {
+        'q_table': q_table,
+        'episode_outcomes': episode_outcomes
+    }
 
 # Step 87 - reinforce_log_prob_of_action (not yet solved)
 # TODO: implement

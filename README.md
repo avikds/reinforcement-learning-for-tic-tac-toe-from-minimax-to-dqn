@@ -95,7 +95,7 @@ python scaffold.py
 - [x] **83.** train_dqn_agent
 - [x] **84.** compare_dqn_tabular_random_minimax
 - [x] **85.** sarsa_on_policy_update
-- [ ] **86.** train_sarsa_agent
+- [x] **86.** train_sarsa_agent
 - [ ] **87.** reinforce_log_prob_of_action
 - [ ] **88.** reinforce_collect_episode_returns
 - [ ] **89.** reinforce_policy_gradient_update
