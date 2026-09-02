@@ -1207,8 +1207,15 @@ def encode_board_flat_length_nine(board, current_player):
     """Encode a 3x3 board as a length-9 float32 vector from current_player's view."""
     return (board * current_player).astype(np.float32).reshape(9)
 
-# Step 65 - encode_board_one_hot_length_eighteen (not yet solved)
-# TODO: implement
+# Step 65 - encode_board_one_hot_length_eighteen
+def encode_board_one_hot_length_eighteen(board, current_player):
+    """Encode a 3x3 board as a length-18 two-channel one-hot vector."""
+    perspective_board = board * current_player
+
+    own_pieces = (perspective_board == 1).astype(np.float32).reshape(9)
+    opponent_pieces = (perspective_board == -1).astype(np.float32).reshape(9)
+
+    return np.concatenate([own_pieces, opponent_pieces]).astype(np.float32)
 
 # Step 66 - build_mlp_architecture (not yet solved)
 # TODO: implement

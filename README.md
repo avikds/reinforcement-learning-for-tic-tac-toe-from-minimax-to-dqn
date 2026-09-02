@@ -74,7 +74,7 @@ python scaffold.py
 - [x] **62.** serialize_q_table_to_dict
 - [x] **63.** deserialize_q_table_from_dict
 - [x] **64.** encode_board_flat_length_nine
-- [ ] **65.** encode_board_one_hot_length_eighteen
+- [x] **65.** encode_board_one_hot_length_eighteen
 - [ ] **66.** build_mlp_architecture
 - [ ] **67.** initialize_mlp_parameters
 - [ ] **68.** mlp_forward_pass
