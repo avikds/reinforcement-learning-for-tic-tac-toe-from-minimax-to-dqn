@@ -475,8 +475,16 @@ def play_minimax_vs_minimax_matches(n_games):
 
     return rates
 
-# Step 31 - encode_board_state_key (not yet solved)
-# TODO: implement
+# Step 31 - encode_board_state_key
+def encode_board_state_key(board):
+    """Encode a 3x3 board as a length-9 string over {'0','1','2'} in row-major order."""
+    mapping = {
+        0: '0',
+        1: '1',
+        -1: '2'
+    }
+
+    return ''.join(mapping[int(cell)] for cell in board.flat)
 
 # Step 32 - canonical_board_key (not yet solved)
 # TODO: implement
