@@ -39,7 +39,7 @@ python scaffold.py
 - [x] **27.** minimax_best_move
 - [x] **28.** minimax_alpha_beta
 - [x] **29.** play_minimax_vs_random_matches
-- [ ] **30.** play_minimax_vs_minimax_matches
+- [x] **30.** play_minimax_vs_minimax_matches
 - [ ] **31.** encode_board_state_key
 - [ ] **32.** canonical_board_key
 - [ ] **33.** initialize_q_table
