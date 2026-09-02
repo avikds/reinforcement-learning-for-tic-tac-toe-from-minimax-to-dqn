@@ -25,7 +25,7 @@ python scaffold.py
 - [x] **13.** get_game_status
 - [x] **14.** get_current_player
 - [x] **15.** switch_player
-- [ ] **16.** play_hardcoded_game
+- [x] **16.** play_hardcoded_game
 - [ ] **17.** play_interactive_game
 - [ ] **18.** TicTacToeGame
 - [ ] **19.** random_move_agent
