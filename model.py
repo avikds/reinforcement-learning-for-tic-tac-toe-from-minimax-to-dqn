@@ -2341,8 +2341,162 @@ def reinforce_policy_gradient_update(
         learning_rate=learning_rate
     )
 
-# Step 90 - train_reinforce_agent (not yet solved)
-# TODO: implement
+# Step 90 - train_reinforce_agent
+def train_reinforce_agent(
+    num_episodes,
+    gamma,
+    learning_rate,
+    hidden_dim,
+    opponent_policy,
+    rng,
+    init_seed=0
+):
+    """Train a policy MLP with REINFORCE against the supplied opponent."""
+    architecture = build_mlp_architecture(9, hidden_dim, 9)
+
+    params = initialize_mlp_parameters(
+        architecture,
+        seed=init_seed
+    )
+
+    adam_state = {}
+    episode_outcomes = []
+
+    for _ in range(num_episodes):
+        board, current_player = episode_reset_game()
+
+        states = []
+        actions = []
+        legal_masks = []
+        rewards = []
+
+        status = 'ongoing'
+
+        while not episode_check_terminate(status):
+            if current_player == 1:
+                # Agent's turn.
+                state = encode_board_flat_length_nine(
+                    board,
+                    current_player
+                )
+
+                legal_mask = np.zeros(9, dtype=bool)
+                for row, col in get_legal_moves(board):
+                    legal_mask[row * 3 + col] = True
+
+                logits, _ = mlp_forward_pass(
+                    params,
+                    state.reshape(1, -1)
+                )
+                logits = logits[0]
+
+                masked_logits = mask_illegal_actions_neg_inf(
+                    logits,
+                    legal_mask
+                )
+
+                max_logit = np.max(masked_logits)
+                exp_logits = np.exp(masked_logits - max_logit)
+                exp_logits[~legal_mask] = 0.0
+                probs = exp_logits / np.sum(exp_logits)
+
+                action = int(
+                    rng.choice(
+                        np.arange(9),
+                        p=probs
+                    )
+                )
+
+                row = action // 3
+                col = action % 3
+
+                next_board = place_move(
+                    board,
+                    row,
+                    col,
+                    current_player
+                )
+
+                next_status = get_game_status(next_board)
+                done = next_status != 'ongoing'
+
+                # The agent receives reward only on its final move.
+                reward = tic_tac_toe_reward(
+                    next_status,
+                    1
+                ) if done else 0.0
+
+                states.append(state)
+                actions.append(action)
+                legal_masks.append(legal_mask)
+                rewards.append(float(reward))
+
+                board = next_board
+                status = next_status
+
+                if done:
+                    break
+
+                current_player = switch_player(current_player)
+
+            else:
+                # Opponent's turn.
+                action = opponent_policy(
+                    board,
+                    current_player,
+                    rng
+                )
+
+                # Allow opponent policies to return either a flat index
+                # or a (row, col) tuple.
+                if isinstance(action, tuple):
+                    row, col = action
+                else:
+                    row = action // 3
+                    col = action % 3
+
+                board = place_move(
+                    board,
+                    row,
+                    col,
+                    current_player
+                )
+
+                status = get_game_status(board)
+
+                if status != 'ongoing':
+                    break
+
+                current_player = switch_player(current_player)
+
+        episode_outcomes.append(status)
+
+        if states:
+            episode_cache = {
+                'states': np.asarray(states, dtype=np.float32),
+                'actions': np.asarray(actions, dtype=int),
+                'legal_masks': np.asarray(legal_masks, dtype=bool),
+                'forward_caches': []
+            }
+
+            returns = reinforce_collect_episode_returns(
+                rewards,
+                gamma
+            )
+
+            params, adam_state = reinforce_policy_gradient_update(
+                params,
+                episode_cache,
+                returns,
+                adam_state,
+                learning_rate=learning_rate
+            )
+
+    return {
+        'params': params,
+        'architecture': architecture,
+        'episode_outcomes': episode_outcomes
+    }
 
 # Step 91 - compare_value_vs_policy_learners (not yet solved)
 # TODO: implement

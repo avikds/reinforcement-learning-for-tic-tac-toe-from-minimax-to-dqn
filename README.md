@@ -99,7 +99,7 @@ python scaffold.py
 - [x] **87.** reinforce_log_prob_of_action
 - [x] **88.** reinforce_collect_episode_returns
 - [x] **89.** reinforce_policy_gradient_update
-- [ ] **90.** train_reinforce_agent
+- [x] **90.** train_reinforce_agent
 - [ ] **91.** compare_value_vs_policy_learners
 - [ ] **92.** symmetry_augmented_training
 
