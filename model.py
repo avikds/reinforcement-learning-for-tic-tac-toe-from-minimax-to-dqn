@@ -1336,8 +1336,55 @@ def mlp_backward_pass(params, cache, action_indices, target_q):
         'b2': db2
     }
 
-# Step 73 - adam_update_step (not yet solved)
-# TODO: implement
+# Step 73 - adam_update_step
+def adam_update_step(
+    params,
+    grads,
+    adam_state,
+    learning_rate=1e-3,
+    beta1=0.9,
+    beta2=0.999,
+    eps=1e-8
+):
+    """Perform one Adam optimizer step and return updated params and state."""
+    if 't' not in adam_state:
+        adam_state['t'] = 0
+
+    if 'm' not in adam_state:
+        adam_state['m'] = {}
+
+    if 'v' not in adam_state:
+        adam_state['v'] = {}
+
+    adam_state['t'] += 1
+    t = adam_state['t']
+
+    new_params = {}
+
+    for key in params:
+        if key not in adam_state['m']:
+            adam_state['m'][key] = np.zeros_like(params[key], dtype=float)
+            adam_state['v'][key] = np.zeros_like(params[key], dtype=float)
+
+        adam_state['m'][key] = (
+            beta1 * adam_state['m'][key]
+            + (1.0 - beta1) * grads[key]
+        )
+
+        adam_state['v'][key] = (
+            beta2 * adam_state['v'][key]
+            + (1.0 - beta2) * (grads[key] ** 2)
+        )
+
+        m_hat = adam_state['m'][key] / (1.0 - beta1 ** t)
+        v_hat = adam_state['v'][key] / (1.0 - beta2 ** t)
+
+        new_params[key] = (
+            params[key]
+            - learning_rate * m_hat / (np.sqrt(v_hat) + eps)
+        )
+
+    return new_params, adam_state
 
 # Step 74 - create_replay_buffer (not yet solved)
 # TODO: implement
