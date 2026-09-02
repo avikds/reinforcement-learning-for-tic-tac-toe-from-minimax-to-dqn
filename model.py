@@ -486,8 +486,17 @@ def encode_board_state_key(board):
 
     return ''.join(mapping[int(cell)] for cell in board.flat)
 
-# Step 32 - canonical_board_key (not yet solved)
-# TODO: implement
+# Step 32 - canonical_board_key
+def canonical_board_key(board):
+    """Return the lexicographically smallest key across all 8 board symmetries."""
+    candidates = []
+
+    for k in range(4):
+        rotated = np.rot90(board, k)
+        candidates.append(encode_board_state_key(rotated))
+        candidates.append(encode_board_state_key(np.fliplr(rotated)))
+
+    return min(candidates)
 
 # Step 33 - initialize_q_table (not yet solved)
 # TODO: implement
