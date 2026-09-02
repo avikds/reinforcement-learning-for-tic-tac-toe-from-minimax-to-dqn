@@ -20,7 +20,7 @@ python scaffold.py
 - [x] **8.** check_column_win
 - [x] **9.** check_main_diagonal_win
 - [x] **10.** check_anti_diagonal_win
-- [ ] **11.** is_winner
+- [x] **11.** is_winner
 - [ ] **12.** is_draw
 - [ ] **13.** get_game_status
 - [ ] **14.** get_current_player
