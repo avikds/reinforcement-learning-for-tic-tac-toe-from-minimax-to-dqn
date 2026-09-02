@@ -11,7 +11,7 @@ python scaffold.py
 ## Steps
 
 - [x] **1.** create_empty_board
-- [ ] **2.** encode_player
+- [x] **2.** encode_player
 - [ ] **3.** print_board
 - [ ] **4.** is_cell_empty
 - [ ] **5.** place_move

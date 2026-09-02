@@ -13,8 +13,15 @@ def create_empty_board():
     """Return an empty 3x3 Tic-Tac-Toe board as an int numpy array of zeros."""
     return np.zeros((3, 3), dtype=int)
 
-# Step 2 - encode_player (not yet solved)
-# TODO: implement
+# Step 2 - encode_player
+def encode_player(player):
+    """Return the integer encoding for 'X', 'O', or 'empty'."""
+    mapping = {
+        'X': 1,
+        'O': -1,
+        'empty': 0
+    }
+    return mapping[player]
 
 # Step 3 - print_board (not yet solved)
 # TODO: implement
