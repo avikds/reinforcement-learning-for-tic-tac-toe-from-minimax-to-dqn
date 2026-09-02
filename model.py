@@ -266,8 +266,26 @@ def minimax_terminal_score(status):
     else:
         return 0
 
-# Step 24 - minimax_value (not yet solved)
-# TODO: implement
+# Step 24 - minimax_value
+def minimax_value(board, player):
+    """Return the minimax value of `board` with `player` to move."""
+    status = get_game_status(board)
+
+    if status != 'ongoing':
+        return minimax_terminal_score(status)
+
+    legal_moves = get_legal_moves(board)
+    child_values = []
+
+    for row, col in legal_moves:
+        next_board = place_move(board, row, col, player)
+        value = minimax_value(next_board, switch_player(player))
+        child_values.append(value)
+
+    if player == 1:
+        return max(child_values)
+    else:
+        return min(child_values)
 
 # Step 25 - minimax_recursive (not yet solved)
 # TODO: implement
