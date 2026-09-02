@@ -1472,8 +1472,30 @@ def build_target_network_copy(online_params):
         for key, value in online_params.items()
     }
 
-# Step 79 - compute_target_q_with_target_network (not yet solved)
-# TODO: implement
+# Step 79 - compute_target_q_with_target_network
+def compute_target_q_with_target_network(target_params, batch, gamma):
+    """Compute DQN bootstrap targets r + gamma * max_a' Q_target(s', a')."""
+    next_states = batch['next_states']
+    rewards = np.asarray(batch['rewards'], dtype=float)
+    dones = np.asarray(batch['dones'], dtype=bool)
+    next_legal_masks = np.asarray(batch['next_legal_masks'], dtype=bool)
+
+    next_q_values, _ = mlp_forward_pass(target_params, next_states)
+
+    masked_next_q_values = mask_illegal_actions_neg_inf(
+        next_q_values,
+        next_legal_masks
+    )
+
+    max_next_q_values = np.max(masked_next_q_values, axis=1)
+
+    targets = rewards.copy()
+    non_terminal = ~dones
+    targets[non_terminal] += (
+        gamma * max_next_q_values[non_terminal]
+    )
+
+    return targets
 
 # Step 80 - sync_target_network_periodically (not yet solved)
 # TODO: implement

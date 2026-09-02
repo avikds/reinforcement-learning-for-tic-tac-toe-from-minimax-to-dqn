@@ -88,7 +88,7 @@ python scaffold.py
 - [x] **76.** cap_buffer_size_drop_oldest
 - [x] **77.** sample_minibatch_from_buffer
 - [x] **78.** build_target_network_copy
-- [ ] **79.** compute_target_q_with_target_network
+- [x] **79.** compute_target_q_with_target_network
 - [ ] **80.** sync_target_network_periodically
 - [ ] **81.** dqn_select_action
 - [ ] **82.** dqn_train_step
