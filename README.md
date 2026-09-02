@@ -21,7 +21,7 @@ python scaffold.py
 - [x] **9.** check_main_diagonal_win
 - [x] **10.** check_anti_diagonal_win
 - [x] **11.** is_winner
-- [ ] **12.** is_draw
+- [x] **12.** is_draw
 - [ ] **13.** get_game_status
 - [ ] **14.** get_current_player
 - [ ] **15.** switch_player
