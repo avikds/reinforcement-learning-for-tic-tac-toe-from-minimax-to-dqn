@@ -1290,8 +1290,15 @@ def argmax_action_from_q_values(masked_q_values):
     """Return the index of the largest entry in masked_q_values as an int."""
     return int(np.argmax(masked_q_values))
 
-# Step 71 - mse_loss_on_chosen_action (not yet solved)
-# TODO: implement
+# Step 71 - mse_loss_on_chosen_action
+def mse_loss_on_chosen_action(predicted_q, action_indices, target_q):
+    """MSE between Q(s, a_taken) and the bootstrapped target Q."""
+    chosen_q = predicted_q[
+        np.arange(predicted_q.shape[0]),
+        action_indices
+    ]
+
+    return float(np.mean((chosen_q - target_q) ** 2))
 
 # Step 72 - mlp_backward_pass (not yet solved)
 # TODO: implement

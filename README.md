@@ -80,7 +80,7 @@ python scaffold.py
 - [x] **68.** mlp_forward_pass
 - [x] **69.** mask_illegal_actions_neg_inf
 - [x] **70.** argmax_action_from_q_values
-- [ ] **71.** mse_loss_on_chosen_action
+- [x] **71.** mse_loss_on_chosen_action
 - [ ] **72.** mlp_backward_pass
 - [ ] **73.** adam_update_step
 - [ ] **74.** create_replay_buffer
