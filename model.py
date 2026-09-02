@@ -1217,8 +1217,14 @@ def encode_board_one_hot_length_eighteen(board, current_player):
 
     return np.concatenate([own_pieces, opponent_pieces]).astype(np.float32)
 
-# Step 66 - build_mlp_architecture (not yet solved)
-# TODO: implement
+# Step 66 - build_mlp_architecture
+def build_mlp_architecture(input_dim, hidden_dim, output_dim=9):
+    """Return a dict describing the MLP layer dimensions."""
+    return {
+        'input_dim': int(input_dim),
+        'hidden_dim': int(hidden_dim),
+        'output_dim': int(output_dim)
+    }
 
 # Step 67 - initialize_mlp_parameters (not yet solved)
 # TODO: implement
