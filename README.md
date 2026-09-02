@@ -22,7 +22,7 @@ python scaffold.py
 - [x] **10.** check_anti_diagonal_win
 - [x] **11.** is_winner
 - [x] **12.** is_draw
-- [ ] **13.** get_game_status
+- [x] **13.** get_game_status
 - [ ] **14.** get_current_player
 - [ ] **15.** switch_player
 - [ ] **16.** play_hardcoded_game
