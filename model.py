@@ -411,6 +411,8 @@ def minimax_alpha_beta(board, player, alpha, beta):
     return best_score, best_move
 
 # Step 29 - play_minimax_vs_random_matches
+29
+
 def play_minimax_vs_random_matches(n_games, minimax_plays_x, rng):
     """Run n_games of minimax vs random and return aggregated outcome rates."""
     outcomes = []
@@ -435,7 +437,6 @@ def play_minimax_vs_random_matches(n_games, minimax_plays_x, rng):
             board = place_move(board, row, col, current_player)
 
             status = get_game_status(board)
-
             if status != 'ongoing':
                 outcomes.append(status)
                 break
