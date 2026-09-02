@@ -908,8 +908,116 @@ def perspective_reward_sign(reward, acting_player, scoring_player):
 
     return float(-reward)
 
-# Step 58 - train_q_agent_self_play (not yet solved)
-# TODO: implement
+# Step 58 - train_q_agent_self_play
+def train_q_agent_self_play(
+    num_episodes,
+    alpha,
+    gamma,
+    initial_epsilon,
+    min_epsilon,
+    decay_rate,
+    rng
+):
+    """Run self-play Q-learning with a shared Q-table for both players."""
+    q_table = initialize_q_table()
+    episode_outcomes = []
+
+    for episode_index in range(num_episodes):
+        epsilon = epsilon_decay_schedule(
+            initial_epsilon,
+            episode_index,
+            min_epsilon,
+            decay_rate
+        )
+
+        episode = self_play_episode(
+            q_table,
+            alpha,
+            gamma,
+            epsilon,
+            rng
+        )
+
+        final_status = episode['final_status']
+        episode_outcomes.append(final_status)
+
+        for transition in episode['transitions']:
+            player = transition['player']
+            state_key = transition['state_key']
+            action = transition['action']
+            next_board = transition['next_board']
+            done = transition['done']
+            reward = transition['reward']
+
+            # Express the state from the acting player's perspective.
+            # The stored action is still the flat 0..8 cell index.
+            # Recompute the canonical key from the perspective-flipped board.
+            # This ensures X and O share the same Q-table representation.
+            #
+            # The original transition state is represented by state_key,
+            # but to apply the perspective-aware update we reconstruct the
+            # board state from the transition's next_board and played action.
+            if player == 1:
+                perspective_state_key = state_key
+                scoring_player = 1 if final_status == 'X_win' else -1
+            else:
+                scoring_player = 1 if final_status == 'X_win' else -1
+
+                # Recover the pre-action board from next_board.
+                pre_board = next_board.copy()
+                row = action // 3
+                col = action % 3
+                pre_board[row, col] = 0
+
+                perspective_board = flip_board_perspective(
+                    pre_board,
+                    player
+                )
+                perspective_state_key = canonical_board_key(
+                    perspective_board
+                )
+
+            acting_reward = perspective_reward_sign(
+                reward,
+                player,
+                scoring_player
+            )
+
+            perspective_next_board = flip_board_perspective(
+                next_board,
+                player
+            )
+
+            if done:
+                target = q_learning_terminal_target(acting_reward)
+            else:
+                next_state_key = canonical_board_key(
+                    perspective_next_board
+                )
+                next_legal_moves = get_legal_moves(
+                    perspective_next_board
+                )
+
+                target = q_learning_nonterminal_target(
+                    acting_reward,
+                    gamma,
+                    q_table,
+                    next_state_key,
+                    next_legal_moves
+                )
+
+            q_learning_update(
+                q_table,
+                perspective_state_key,
+                action,
+                target,
+                alpha
+            )
+
+    return {
+        'q_table': q_table,
+        'episode_outcomes': episode_outcomes
+    }
 
 # Step 59 - evaluate_q_agent_vs_random (not yet solved)
 # TODO: implement
