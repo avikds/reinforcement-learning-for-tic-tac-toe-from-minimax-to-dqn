@@ -2498,8 +2498,274 @@ def train_reinforce_agent(
         'episode_outcomes': episode_outcomes
     }
 
-# Step 91 - compare_value_vs_policy_learners (not yet solved)
-# TODO: implement
+# Step 91 - compare_value_vs_policy_learners
+def compare_value_vs_policy_learners(num_episodes=5000, eval_games=200, seed=0):
+    """Train Q-learning, SARSA, and REINFORCE under matched settings."""
+    # Shared training settings.
+    alpha = 0.5
+    gamma = 0.95
+    initial_epsilon = 1.0
+    min_epsilon = 0.05
+    decay_rate = 0.001
+
+    # Random opponent policy returning a flat action index.
+    def random_opponent_policy(board, player, rng):
+        row, col = random_move_agent(board, player, rng)
+        return row * 3 + col
+
+    # Keep independent RNG streams so each learner has reproducible
+    # behavior without one learner consuming another's random sequence.
+    q_rng = np.random.default_rng(seed)
+    sarsa_rng = np.random.default_rng(seed)
+    reinforce_rng = np.random.default_rng(seed)
+
+    # Train tabular Q-learning.
+    q_result = train_q_learning_agent(
+        num_episodes,
+        alpha,
+        gamma,
+        initial_epsilon,
+        min_epsilon,
+        decay_rate,
+        random_opponent_policy,
+        q_rng
+    )
+
+    # Train SARSA.
+    sarsa_result = train_sarsa_agent(
+        num_episodes,
+        alpha,
+        gamma,
+        initial_epsilon,
+        min_epsilon,
+        decay_rate,
+        random_opponent_policy,
+        sarsa_rng
+    )
+
+    # Train REINFORCE.
+    reinforce_result = train_reinforce_agent(
+        num_episodes,
+        gamma,
+        1e-2,
+        32,
+        random_opponent_policy,
+        reinforce_rng,
+        init_seed=seed
+    )
+
+    def outcomes_to_learning_curve(outcomes):
+        scores = []
+
+        for outcome in outcomes:
+            if outcome == 'X_win':
+                scores.append(1.0)
+            elif outcome == 'O_win':
+                scores.append(-1.0)
+            else:
+                scores.append(0.0)
+
+        return scores
+
+    def evaluate_tabular(q_table, eval_seed):
+        rng = np.random.default_rng(eval_seed)
+
+        if eval_games == 0:
+            return {
+                'win_rate_vs_random': 0.0,
+                'draw_rate_vs_minimax': 0.0
+            }
+
+        random_result = evaluate_q_agent_vs_random(
+            q_table,
+            eval_games,
+            rng
+        )
+
+        minimax_result = evaluate_q_agent_vs_minimax(
+            q_table,
+            eval_games,
+            rng
+        )
+
+        return {
+            'win_rate_vs_random': float(random_result['win_rate']),
+            'draw_rate_vs_minimax': float(minimax_result['draw_rate'])
+        }
+
+    def evaluate_reinforce(params, eval_seed):
+        rng = np.random.default_rng(eval_seed)
+
+        if eval_games == 0:
+            return {
+                'win_rate_vs_random': 0.0,
+                'draw_rate_vs_minimax': 0.0
+            }
+
+        random_wins = 0
+        random_draws = 0
+        random_losses = 0
+
+        minimax_wins = 0
+        minimax_draws = 0
+        minimax_losses = 0
+
+        for game_index in range(eval_games):
+            agent_player = 1 if game_index % 2 == 0 else -1
+
+            def choose_policy_action(board, player):
+                state = encode_board_flat_length_nine(
+                    board,
+                    player
+                )
+
+                legal_mask = np.zeros(9, dtype=bool)
+                for row, col in get_legal_moves(board):
+                    legal_mask[row * 3 + col] = True
+
+                logits, _ = mlp_forward_pass(
+                    params,
+                    state.reshape(1, -1)
+                )
+
+                masked_logits = mask_illegal_actions_neg_inf(
+                    logits[0],
+                    legal_mask
+                )
+
+                return argmax_action_from_q_values(masked_logits)
+
+            # REINFORCE vs random.
+            board = create_empty_board()
+            current_player = 1
+
+            while True:
+                if current_player == agent_player:
+                    action = choose_policy_action(
+                        board,
+                        current_player
+                    )
+                    row, col = action // 3, action % 3
+                else:
+                    row, col = random_move_agent(
+                        board,
+                        current_player,
+                        rng
+                    )
+
+                board = place_move(
+                    board,
+                    row,
+                    col,
+                    current_player
+                )
+
+                status = get_game_status(board)
+
+                if status != 'ongoing':
+                    reward = tic_tac_toe_reward(
+                        status,
+                        agent_player
+                    )
+
+                    if reward > 0:
+                        random_wins += 1
+                    elif reward < 0:
+                        random_losses += 1
+                    else:
+                        random_draws += 1
+                    break
+
+                current_player = switch_player(current_player)
+
+            # REINFORCE vs minimax.
+            board = create_empty_board()
+            current_player = 1
+
+            while True:
+                if current_player == agent_player:
+                    action = choose_policy_action(
+                        board,
+                        current_player
+                    )
+                    row, col = action // 3, action % 3
+                else:
+                    _, move = minimax_alpha_beta(
+                        board,
+                        current_player,
+                        -float('inf'),
+                        float('inf')
+                    )
+                    row, col = move
+
+                board = place_move(
+                    board,
+                    row,
+                    col,
+                    current_player
+                )
+
+                status = get_game_status(board)
+
+                if status != 'ongoing':
+                    reward = tic_tac_toe_reward(
+                        status,
+                        agent_player
+                    )
+
+                    if reward > 0:
+                        minimax_wins += 1
+                    elif reward < 0:
+                        minimax_losses += 1
+                    else:
+                        minimax_draws += 1
+                    break
+
+                current_player = switch_player(current_player)
+
+        return {
+            'win_rate_vs_random': random_wins / eval_games,
+            'draw_rate_vs_minimax': minimax_draws / eval_games
+        }
+
+    q_eval = evaluate_tabular(
+        q_result['q_table'],
+        seed + 100
+    )
+
+    sarsa_eval = evaluate_tabular(
+        sarsa_result['q_table'],
+        seed + 200
+    )
+
+    reinforce_eval = evaluate_reinforce(
+        reinforce_result['params'],
+        seed + 300
+    )
+
+    return {
+        'q_learning': {
+            'win_rate_vs_random': q_eval['win_rate_vs_random'],
+            'draw_rate_vs_minimax': q_eval['draw_rate_vs_minimax'],
+            'learning_curve': outcomes_to_learning_curve(
+                q_result['episode_outcomes']
+            )
+        },
+        'sarsa': {
+            'win_rate_vs_random': sarsa_eval['win_rate_vs_random'],
+            'draw_rate_vs_minimax': sarsa_eval['draw_rate_vs_minimax'],
+            'learning_curve': outcomes_to_learning_curve(
+                sarsa_result['episode_outcomes']
+            )
+        },
+        'reinforce': {
+            'win_rate_vs_random': reinforce_eval['win_rate_vs_random'],
+            'draw_rate_vs_minimax': reinforce_eval['draw_rate_vs_minimax'],
+            'learning_curve': outcomes_to_learning_curve(
+                reinforce_result['episode_outcomes']
+            )
+        }
+    }
 
 # Step 92 - symmetry_augmented_training (not yet solved)
 # TODO: implement
