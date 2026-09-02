@@ -212,8 +212,21 @@ def random_move_agent(board, player, rng):
     row, col = legal_moves[index]
     return int(row), int(col)
 
-# Step 20 - play_random_vs_random_game (not yet solved)
-# TODO: implement
+# Step 20 - play_random_vs_random_game
+def play_random_vs_random_game(rng):
+    """Simulate one full random-vs-random game and return the final status."""
+    board = create_empty_board()
+    current_player = 1
+
+    while True:
+        row, col = random_move_agent(board, current_player, rng)
+        board = place_move(board, row, col, current_player)
+
+        status = get_game_status(board)
+        if status != 'ongoing':
+            return status
+
+        current_player = switch_player(current_player)
 
 # Step 21 - play_random_vs_random_matches (not yet solved)
 # TODO: implement
