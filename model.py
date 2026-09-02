@@ -525,8 +525,10 @@ def choose_discount_factor_gamma():
     """Return the discount factor gamma in [0, 1] for Q-learning."""
     return 0.9
 
-# Step 38 - choose_initial_epsilon (not yet solved)
-# TODO: implement
+# Step 38 - choose_initial_epsilon
+def choose_initial_epsilon():
+    """Return the starting exploration rate epsilon for epsilon-greedy."""
+    return 1.0
 
 # Step 39 - epsilon_decay_schedule (not yet solved)
 # TODO: implement

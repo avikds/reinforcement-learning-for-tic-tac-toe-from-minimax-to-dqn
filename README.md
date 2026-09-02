@@ -47,7 +47,7 @@ python scaffold.py
 - [x] **35.** set_q_value
 - [x] **36.** choose_learning_rate_alpha
 - [x] **37.** choose_discount_factor_gamma
-- [ ] **38.** choose_initial_epsilon
+- [x] **38.** choose_initial_epsilon
 - [ ] **39.** epsilon_decay_schedule
 - [ ] **40.** epsilon_greedy_explore_move
 - [ ] **41.** epsilon_greedy_select_action
