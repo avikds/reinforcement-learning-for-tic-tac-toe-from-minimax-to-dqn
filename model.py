@@ -1300,8 +1300,41 @@ def mse_loss_on_chosen_action(predicted_q, action_indices, target_q):
 
     return float(np.mean((chosen_q - target_q) ** 2))
 
-# Step 72 - mlp_backward_pass (not yet solved)
-# TODO: implement
+# Step 72 - mlp_backward_pass
+def mlp_backward_pass(params, cache, action_indices, target_q):
+    """Backprop MSE-on-chosen-action loss through the MLP and return param gradients."""
+    x = cache['x']
+    z1 = cache['z1']
+    h1 = cache['h1']
+    q = cache['q']
+
+    batch_size = x.shape[0]
+
+    # Gradient of the loss with respect to the output Q-values.
+    dq = np.zeros_like(q, dtype=float)
+    rows = np.arange(batch_size)
+    chosen_q = q[rows, action_indices]
+
+    dq[rows, action_indices] = 2.0 * (chosen_q - target_q) / batch_size
+
+    # Output layer gradients.
+    dW2 = h1.T @ dq
+    db2 = np.sum(dq, axis=0)
+
+    # Backpropagate through ReLU.
+    dh1 = dq @ params['W2'].T
+    dz1 = dh1 * (z1 > 0)
+
+    # Hidden layer gradients.
+    dW1 = x.T @ dz1
+    db1 = np.sum(dz1, axis=0)
+
+    return {
+        'W1': dW1,
+        'b1': db1,
+        'W2': dW2,
+        'b2': db2
+    }
 
 # Step 73 - adam_update_step (not yet solved)
 # TODO: implement

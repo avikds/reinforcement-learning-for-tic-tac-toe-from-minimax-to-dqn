@@ -81,7 +81,7 @@ python scaffold.py
 - [x] **69.** mask_illegal_actions_neg_inf
 - [x] **70.** argmax_action_from_q_values
 - [x] **71.** mse_loss_on_chosen_action
-- [ ] **72.** mlp_backward_pass
+- [x] **72.** mlp_backward_pass
 - [ ] **73.** adam_update_step
 - [ ] **74.** create_replay_buffer
 - [ ] **75.** append_transition_to_buffer
