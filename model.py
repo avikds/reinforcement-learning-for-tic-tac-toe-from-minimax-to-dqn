@@ -1285,8 +1285,10 @@ def mask_illegal_actions_neg_inf(q_values, legal_action_mask):
     masked_q_values[~legal_action_mask] = -np.inf
     return masked_q_values
 
-# Step 70 - argmax_action_from_q_values (not yet solved)
-# TODO: implement
+# Step 70 - argmax_action_from_q_values
+def argmax_action_from_q_values(masked_q_values):
+    """Return the index of the largest entry in masked_q_values as an int."""
+    return int(np.argmax(masked_q_values))
 
 # Step 71 - mse_loss_on_chosen_action (not yet solved)
 # TODO: implement
