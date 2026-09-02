@@ -61,7 +61,7 @@ python scaffold.py
 - [x] **49.** episode_agent_pick_action
 - [x] **50.** episode_apply_action
 - [x] **51.** episode_apply_q_update
-- [ ] **52.** episode_check_terminate
+- [x] **52.** episode_check_terminate
 - [ ] **53.** train_q_learning_agent
 - [ ] **54.** compute_batched_outcome_stats
 - [ ] **55.** self_play_episode

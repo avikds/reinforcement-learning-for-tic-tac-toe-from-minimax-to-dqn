@@ -719,8 +719,10 @@ def episode_apply_q_update(
         alpha
     )
 
-# Step 52 - episode_check_terminate (not yet solved)
-# TODO: implement
+# Step 52 - episode_check_terminate
+def episode_check_terminate(status):
+    """Return True if status is terminal (win or draw), else False."""
+    return status != 'ongoing'
 
 # Step 53 - train_q_learning_agent (not yet solved)
 # TODO: implement
