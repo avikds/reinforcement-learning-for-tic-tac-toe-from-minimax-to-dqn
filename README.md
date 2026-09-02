@@ -42,7 +42,7 @@ python scaffold.py
 - [x] **30.** play_minimax_vs_minimax_matches
 - [x] **31.** encode_board_state_key
 - [x] **32.** canonical_board_key
-- [ ] **33.** initialize_q_table
+- [x] **33.** initialize_q_table
 - [ ] **34.** get_q_value
 - [ ] **35.** set_q_value
 - [ ] **36.** choose_learning_rate_alpha
