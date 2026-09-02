@@ -574,8 +574,19 @@ def greedy_argmax_over_legal_actions(q_table, state_key, legal_actions, rng):
     index = rng.integers(len(best_actions))
     return best_actions[index]
 
-# Step 43 - random_tie_break_argmax (not yet solved)
-# TODO: implement
+# Step 43 - random_tie_break_argmax
+def random_tie_break_argmax(values, candidates, rng):
+    """Return one candidate whose value equals max(values), tie-broken uniformly at random."""
+    max_value = max(values)
+
+    best_candidates = [
+        candidate
+        for value, candidate in zip(values, candidates)
+        if value == max_value
+    ]
+
+    index = rng.integers(len(best_candidates))
+    return best_candidates[index]
 
 # Step 44 - tic_tac_toe_reward (not yet solved)
 # TODO: implement

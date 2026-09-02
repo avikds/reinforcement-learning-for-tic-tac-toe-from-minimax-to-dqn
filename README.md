@@ -52,7 +52,7 @@ python scaffold.py
 - [x] **40.** epsilon_greedy_explore_move
 - [x] **41.** epsilon_greedy_select_action
 - [x] **42.** greedy_argmax_over_legal_actions
-- [ ] **43.** random_tie_break_argmax
+- [x] **43.** random_tie_break_argmax
 - [ ] **44.** tic_tac_toe_reward
 - [ ] **45.** q_learning_nonterminal_target
 - [ ] **46.** q_learning_terminal_target
