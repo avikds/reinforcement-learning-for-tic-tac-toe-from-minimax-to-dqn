@@ -256,8 +256,15 @@ def compute_outcome_rates(outcomes):
         'draw_rate': outcomes.count('draw') / total_games
     }
 
-# Step 23 - minimax_terminal_score (not yet solved)
-# TODO: implement
+# Step 23 - minimax_terminal_score
+def minimax_terminal_score(status):
+    """Return +1 for 'X_win', -1 for 'O_win', 0 for 'draw'."""
+    if status == 'X_win':
+        return 1
+    elif status == 'O_win':
+        return -1
+    else:
+        return 0
 
 # Step 24 - minimax_value (not yet solved)
 # TODO: implement
