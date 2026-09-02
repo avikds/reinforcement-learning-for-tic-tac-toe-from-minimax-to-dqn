@@ -91,7 +91,7 @@ python scaffold.py
 - [x] **79.** compute_target_q_with_target_network
 - [x] **80.** sync_target_network_periodically
 - [x] **81.** dqn_select_action
-- [ ] **82.** dqn_train_step
+- [x] **82.** dqn_train_step
 - [ ] **83.** train_dqn_agent
 - [ ] **84.** compare_dqn_tabular_random_minimax
 - [ ] **85.** sarsa_on_policy_update
