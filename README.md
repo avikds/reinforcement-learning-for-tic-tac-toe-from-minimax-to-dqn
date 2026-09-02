@@ -101,7 +101,7 @@ python scaffold.py
 - [x] **89.** reinforce_policy_gradient_update
 - [x] **90.** train_reinforce_agent
 - [x] **91.** compare_value_vs_policy_learners
-- [ ] **92.** symmetry_augmented_training
+- [x] **92.** symmetry_augmented_training
 
 ---
 

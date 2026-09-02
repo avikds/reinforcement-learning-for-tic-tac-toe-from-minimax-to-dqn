@@ -2767,6 +2767,89 @@ def compare_value_vs_policy_learners(num_episodes=5000, eval_games=200, seed=0):
         }
     }
 
-# Step 92 - symmetry_augmented_training (not yet solved)
-# TODO: implement
+# Step 92 - symmetry_augmented_training
+def symmetry_augmented_training(
+    q_table,
+    state_board,
+    action,
+    reward,
+    next_state_board,
+    done,
+    alpha,
+    gamma
+):
+    """Apply Q-learning updates to all 8 D4 symmetries of a transition."""
+    action_row = action // 3
+    action_col = action % 3
+
+    # Generate the 8 D4 symmetries:
+    # 4 rotations, with and without horizontal reflection.
+    for k in range(4):
+        rotated_state = np.rot90(state_board, k)
+        rotated_next_state = np.rot90(next_state_board, k)
+
+        candidates = [
+            (rotated_state, rotated_next_state, False),
+            (
+                np.fliplr(rotated_state),
+                np.fliplr(rotated_next_state),
+                True
+            )
+        ]
+
+        for transformed_state, transformed_next_state, reflected in candidates:
+            # Transform the action using the same geometric operation.
+            action_marker = np.zeros((3, 3), dtype=int)
+            action_marker[action_row, action_col] = 1
+
+            transformed_marker = np.rot90(action_marker, k)
+
+            if reflected:
+                transformed_marker = np.fliplr(transformed_marker)
+
+            transformed_action_row, transformed_action_col = np.argwhere(
+                transformed_marker == 1
+            )[0]
+
+            transformed_action = (
+                int(transformed_action_row) * 3
+                + int(transformed_action_col)
+            )
+
+            # Use the transformed state directly as the Q-table state key.
+            state_key = encode_board_state_key(transformed_state)
+
+            if done:
+                target = q_learning_terminal_target(reward)
+            else:
+                next_state_key = encode_board_state_key(
+                    transformed_next_state
+                )
+
+                next_legal_moves = get_legal_moves(
+                    transformed_next_state
+                )
+
+                next_legal_actions = [
+                    row * 3 + col
+                    for row, col in next_legal_moves
+                ]
+
+                target = q_learning_nonterminal_target(
+                    reward,
+                    gamma,
+                    q_table,
+                    next_state_key,
+                    next_legal_actions
+                )
+
+            q_learning_update(
+                q_table,
+                state_key,
+                transformed_action,
+                target,
+                alpha
+            )
+
+    return q_table
 
