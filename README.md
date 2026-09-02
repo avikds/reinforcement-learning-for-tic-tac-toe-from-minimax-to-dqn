@@ -30,7 +30,7 @@ python scaffold.py
 - [x] **18.** TicTacToeGame
 - [x] **19.** random_move_agent
 - [x] **20.** play_random_vs_random_game
-- [ ] **21.** play_random_vs_random_matches
+- [x] **21.** play_random_vs_random_matches
 - [ ] **22.** compute_outcome_rates
 - [ ] **23.** minimax_terminal_score
 - [ ] **24.** minimax_value
