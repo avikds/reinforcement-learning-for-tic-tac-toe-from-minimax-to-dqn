@@ -50,7 +50,7 @@ python scaffold.py
 - [x] **38.** choose_initial_epsilon
 - [x] **39.** epsilon_decay_schedule
 - [x] **40.** epsilon_greedy_explore_move
-- [ ] **41.** epsilon_greedy_select_action
+- [x] **41.** epsilon_greedy_select_action
 - [ ] **42.** greedy_argmax_over_legal_actions
 - [ ] **43.** random_tie_break_argmax
 - [ ] **44.** tic_tac_toe_reward
