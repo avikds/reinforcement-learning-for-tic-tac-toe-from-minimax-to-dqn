@@ -54,7 +54,7 @@ python scaffold.py
 - [x] **42.** greedy_argmax_over_legal_actions
 - [x] **43.** random_tie_break_argmax
 - [x] **44.** tic_tac_toe_reward
-- [ ] **45.** q_learning_nonterminal_target
+- [x] **45.** q_learning_nonterminal_target
 - [ ] **46.** q_learning_terminal_target
 - [ ] **47.** q_learning_update
 - [ ] **48.** episode_reset_game
