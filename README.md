@@ -78,7 +78,7 @@ python scaffold.py
 - [x] **66.** build_mlp_architecture
 - [x] **67.** initialize_mlp_parameters
 - [x] **68.** mlp_forward_pass
-- [ ] **69.** mask_illegal_actions_neg_inf
+- [x] **69.** mask_illegal_actions_neg_inf
 - [ ] **70.** argmax_action_from_q_values
 - [ ] **71.** mse_loss_on_chosen_action
 - [ ] **72.** mlp_backward_pass

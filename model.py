@@ -1278,8 +1278,12 @@ def mlp_forward_pass(params, x):
 
     return q, cache
 
-# Step 69 - mask_illegal_actions_neg_inf (not yet solved)
-# TODO: implement
+# Step 69 - mask_illegal_actions_neg_inf
+def mask_illegal_actions_neg_inf(q_values, legal_action_mask):
+    """Return a copy of q_values with illegal entries set to -inf."""
+    masked_q_values = np.array(q_values, dtype=float, copy=True)
+    masked_q_values[~legal_action_mask] = -np.inf
+    return masked_q_values
 
 # Step 70 - argmax_action_from_q_values (not yet solved)
 # TODO: implement
