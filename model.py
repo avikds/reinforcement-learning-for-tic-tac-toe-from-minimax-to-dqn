@@ -1302,7 +1302,13 @@ def mlp_forward_pass(params, x):
 def mask_illegal_actions_neg_inf(q_values, legal_action_mask):
     """Return a copy of q_values with illegal entries set to -inf."""
     masked_q_values = np.array(q_values, dtype=float, copy=True)
+    legal_action_mask = np.asarray(legal_action_mask, dtype=bool)
+
+    if masked_q_values.ndim == 2 and legal_action_mask.ndim == 1:
+        legal_action_mask = legal_action_mask.reshape(1, -1)
+
     masked_q_values[~legal_action_mask] = -np.inf
+
     return masked_q_values
 
 # Step 70 - argmax_action_from_q_values
