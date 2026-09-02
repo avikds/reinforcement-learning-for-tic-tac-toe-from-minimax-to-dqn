@@ -103,6 +103,23 @@ python scaffold.py
 - [x] **91.** compare_value_vs_policy_learners
 - [x] **92.** symmetry_augmented_training
 
----
+## Results
 
-Built on Deep-ML.
+```
+Empty board:
+. . .
+. . .
+. . .
+After two moves:
+O . .
+. X .
+. . .
+Status: ongoing
+Legal moves remaining: 7
+Random-vs-random rates: {'x_win_rate': 0.585, 'o_win_rate': 0.29, 'draw_rate': 0.125}
+Minimax(X) vs Random rates: {'x_win_rate': 1.0, 'o_win_rate': 0.0, 'draw_rate': 0.0}
+Tabular Q vs Random: {'wins': 47, 'losses': 45, 'draws': 8, 'win_rate': 0.47, 'loss_rate': 0.45, 'draw_rate': 0.08}
+DQN training artifacts keys: ['online_params', 'target_params', 'loss_history', 'reward_history', 'architecture']
+Untrained MLP picks action index: 0
+Scaffold demo complete.
+```
