@@ -72,8 +72,10 @@ def check_column_win(board, player):
     """Return True if `player` has three-in-a-row in any column of `board`."""
     return bool(np.any(np.all(board == player, axis=0)))
 
-# Step 9 - check_main_diagonal_win (not yet solved)
-# TODO: implement
+# Step 9 - check_main_diagonal_win
+def check_main_diagonal_win(board, player):
+    """Return True if `player` occupies all three main-diagonal cells."""
+    return bool(np.all(np.diag(board) == player))
 
 # Step 10 - check_anti_diagonal_win (not yet solved)
 # TODO: implement
