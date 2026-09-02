@@ -1167,8 +1167,26 @@ def evaluate_q_agent_vs_minimax(q_table, num_games, rng):
 
     return compute_outcome_rates(outcomes)
 
-# Step 61 - inspect_q_values_for_state (not yet solved)
-# TODO: implement
+# Step 61 - inspect_q_values_for_state
+import numpy as np
+
+def inspect_q_values_for_state(q_table, board, current_player):
+    """Print the board and Q-values for all 9 cells; return a length-9 array."""
+    state_key = canonical_board_key(board)
+
+    values = np.array([
+        get_q_value(q_table, state_key, (row, col))
+        for row in range(3)
+        for col in range(3)
+    ], dtype=float)
+
+    print_board(board)
+
+    for row in range(3):
+        start = row * 3
+        print(' '.join(f'{value:+.2f}' for value in values[start:start + 3]))
+
+    return values
 
 # Step 62 - serialize_q_table_to_dict (not yet solved)
 # TODO: implement

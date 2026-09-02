@@ -70,7 +70,7 @@ python scaffold.py
 - [x] **58.** train_q_agent_self_play
 - [x] **59.** evaluate_q_agent_vs_random
 - [x] **60.** evaluate_q_agent_vs_minimax
-- [ ] **61.** inspect_q_values_for_state
+- [x] **61.** inspect_q_values_for_state
 - [ ] **62.** serialize_q_table_to_dict
 - [ ] **63.** deserialize_q_table_from_dict
 - [ ] **64.** encode_board_flat_length_nine
