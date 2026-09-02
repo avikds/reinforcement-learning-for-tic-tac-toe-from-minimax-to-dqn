@@ -16,7 +16,7 @@ python scaffold.py
 - [x] **4.** is_cell_empty
 - [x] **5.** place_move
 - [x] **6.** get_legal_moves
-- [ ] **7.** check_row_win
+- [x] **7.** check_row_win
 - [ ] **8.** check_column_win
 - [ ] **9.** check_main_diagonal_win
 - [ ] **10.** check_anti_diagonal_win

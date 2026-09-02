@@ -62,8 +62,10 @@ def get_legal_moves(board):
 
     return legal_moves
 
-# Step 7 - check_row_win (not yet solved)
-# TODO: implement
+# Step 7 - check_row_win
+def check_row_win(board, player):
+    """Return True if `player` has three-in-a-row across any row of `board`."""
+    return bool(np.any(np.all(board == player, axis=1)))
 
 # Step 8 - check_column_win (not yet solved)
 # TODO: implement
