@@ -530,8 +530,11 @@ def choose_initial_epsilon():
     """Return the starting exploration rate epsilon for epsilon-greedy."""
     return 1.0
 
-# Step 39 - epsilon_decay_schedule (not yet solved)
-# TODO: implement
+# Step 39 - epsilon_decay_schedule
+def epsilon_decay_schedule(initial_epsilon, episode_index, min_epsilon, decay_rate):
+    """Return the decayed epsilon for the given episode, clipped to min_epsilon."""
+    epsilon = initial_epsilon * np.exp(-decay_rate * episode_index)
+    return float(max(min_epsilon, epsilon))
 
 # Step 40 - epsilon_greedy_explore_move (not yet solved)
 # TODO: implement
