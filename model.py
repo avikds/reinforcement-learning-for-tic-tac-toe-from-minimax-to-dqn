@@ -724,8 +724,108 @@ def episode_check_terminate(status):
     """Return True if status is terminal (win or draw), else False."""
     return status != 'ongoing'
 
-# Step 53 - train_q_learning_agent (not yet solved)
-# TODO: implement
+# Step 53 - train_q_learning_agent
+def train_q_learning_agent(
+    num_episodes,
+    alpha,
+    gamma,
+    initial_epsilon,
+    min_epsilon,
+    decay_rate,
+    opponent_policy,
+    rng
+):
+    """Run Q-learning episodes with the agent playing X and return the trained table."""
+    q_table = initialize_q_table()
+    episode_outcomes = []
+
+    for episode_index in range(num_episodes):
+        epsilon = epsilon_decay_schedule(
+            initial_epsilon,
+            episode_index,
+            min_epsilon,
+            decay_rate
+        )
+
+        board, current_player = episode_reset_game()
+        agent_player = 1
+        status = 'ongoing'
+
+        while not episode_check_terminate(status):
+            # Agent (X) chooses an action.
+            state_key, action = episode_agent_pick_action(
+                q_table,
+                board,
+                current_player,
+                epsilon,
+                rng
+            )
+
+            transition = episode_apply_action(
+                board,
+                action,
+                current_player,
+                agent_player
+            )
+
+            next_board = transition['next_board']
+            next_player = transition['next_player']
+            status = transition['status']
+
+            # If the agent itself ended the game, update immediately.
+            if transition['done']:
+                episode_apply_q_update(
+                    q_table,
+                    state_key,
+                    action,
+                    transition['reward'],
+                    next_board,
+                    True,
+                    alpha,
+                    gamma
+                )
+                board = next_board
+                break
+
+            # Opponent (O) responds.
+            opponent_action = opponent_policy(
+                next_board,
+                next_player,
+                rng
+            )
+
+            opponent_transition = episode_apply_action(
+                next_board,
+                opponent_action,
+                next_player,
+                agent_player
+            )
+
+            board = opponent_transition['next_board']
+            current_player = opponent_transition['next_player']
+            status = opponent_transition['status']
+
+            # Update the agent's decision using the state after the opponent response.
+            episode_apply_q_update(
+                q_table,
+                state_key,
+                action,
+                opponent_transition['reward'],
+                board,
+                opponent_transition['done'],
+                alpha,
+                gamma
+            )
+
+            if opponent_transition['done']:
+                break
+
+        episode_outcomes.append(status)
+
+    return {
+        'q_table': q_table,
+        'episode_outcomes': episode_outcomes
+    }
 
 # Step 54 - compute_batched_outcome_stats (not yet solved)
 # TODO: implement
